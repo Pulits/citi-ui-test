@@ -14,6 +14,10 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { MensajesComponent } from './mensajes.component';
 import { MensajesRoutingModule } from './mensajes-rounting.module';
 
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
+
+
 @NgModule({
   imports: [
     CommonModule,
@@ -21,7 +25,9 @@ import { MensajesRoutingModule } from './mensajes-rounting.module';
     AlertModule.forRoot(),
     ModalModule.forRoot(),
     TabsModule.forRoot(),
-    CollapseModule
+    CollapseModule,
+    NgbModule,
+    FormsModule
   ],
   declarations: [ MensajesComponent
   ]

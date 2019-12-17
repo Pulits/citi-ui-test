@@ -9,17 +9,30 @@
                 <div class="col-6 col-xl mb-6 mb-xl-0">
                     <div class="form-group">
                         <label for="">Fecha Inicial</label>
-                        <input type="text" class="form-control" id="date" placeholder="dd/mm/aaaa">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="aaaa-mm-dd" name="dp" [(ngModel)]="model"
+                                ngbDatepicker #dpStart="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="dpStart.toggle()" type="button"><i
+                                        class="icon-calendar"></i></button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label for="">Clave de rastreo</label>
-                        <input type="text" class="form-control" id="date" placeholder="192812891">
+                        <input type="text" [(ngModel)]="trackingKey" class="form-control" id="date" placeholder="ej: 192812891">
                     </div>
 
                     <div class="form-group">
-                        <label for="">Monto de depósito. Desde:</label>
-                        <input type="text" class="form-control" id="date" placeholder="$1">
+                        <label for="">Cuenta del ordenante</label>
+                        <input type="text" class="form-control" id="date" placeholder="ej: 192812891">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="" [hidden]="amountSwitch">Monto de depósito. Desde:</label>
+                        <label for="" [hidden]="!amountSwitch">Monto de depósito:</label>
+                        <input type="text" class="form-control" id="date" placeholder="ej: $100.00">
                     </div>
 
 
@@ -29,27 +42,61 @@
 
                     <div class="form-group">
                         <label for="">Fecha Final</label>
-                        <input type="text" class="form-control" id="date" placeholder="dd/mm/aaaa">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="aaaa-mm-dd" name="dp" [(ngModel)]="model"
+                                ngbDatepicker #dpEnd="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" (click)="dpEnd.toggle()" type="button"><i
+                                        class="icon-calendar"></i></button>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="">RFC</label>
+                        <label for="">RFC o CURP</label>
                         <input type="text" class="form-control" id="date" placeholder="192812891">
                     </div>
 
                     <div class="form-group">
-                        <label for="">Monto de depósito. Hasta:</label>
-                        <input type="text" class="form-control" id="date" placeholder="$192812891">
+                        <label for="">Cuenta del beneficiario</label>
+                        <input type="text" class="form-control" id="date" placeholder="ej: 192812891">
                     </div>
+
+                    <div class="form-group" [hidden]="amountSwitch">
+                        <label for="">Monto de depósito. Hasta:</label>
+                        <input type="text" class="form-control" id="date" placeholder="ej: $192,812,891.00">
+                    </div>
+
+
 
 
                 </div>
 
             </div>
+            <div class="row">
+                <div class="col-12 col-xl mb-12 mb-xl-0 d-flex h-100 ">
+
+                    <label class="switch switch-3d switch-primary">
+                        <input type="checkbox" class="switch-input" checked (change)="changeSwitchAmount()">
+                        <span class="switch-slider"></span>
+                    </label>
+                    &nbsp;&nbsp;&nbsp;
+
+                    <label for="" [hidden]="amountSwitch">Monto de depósito por rango</label>
+                    <label for="" [hidden]="!amountSwitch">Monto de depósito fijo</label>
+
+
+
+                </div>
+            </div>
 
             <div class="row align-items-center text-right">
                 <div class="col-12 col-xl mb-12 mb-xl-0">
-                    <button type="button" class="btn btn-primary" (click)="isCollapsedMain = !isCollapsedMain">Buscar</button>
+                    <button type="button" class="btn btn-primary"
+                        (click)=" searchCDABtn()">Buscar</button>
+
+<!--                         <button type="button" class="btn btn-primary"
+                        (click)="isCollapsedMain = !isCollapsedMain; searchCDABtn()">Buscar</button> -->
                 </div>
             </div>
         </div>
@@ -60,10 +107,8 @@
                 <div class="card-header">
                     <strong>Resultados</strong>
                 </div>
-                <div class="card-body" 
-                (collapsed)="collapsedMain($event)"
-                (expanded)="expandedMain($event)"
-                [collapse]="isCollapsedMain">
+                <div class="card-body" (collapsed)="collapsedMain($event)" (expanded)="expandedMain($event)"
+                    [collapse]="isCollapsedMain">
                     <div class="col-md-12 mb-12">
                         <!-- Nav tabs -->
 
@@ -86,22 +131,22 @@
                                             (expanded)="expanded1($event)" [collapse]="isCollapsed1">
                                             <dl class="row">
                                                 <dt class="col-sm-3">Tipo de Cuenta</dt>
-                                                <dd class="col-sm-9">Tercero a Tercero</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.ordererAccountType}}</dd>
 
                                                 <dt class="col-sm-3">Cuenta</dt>
-                                                <dd class="col-sm-9">2426524</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.orderingAccount}}</dd>
 
                                                 <dt class="col-sm-3">RFC o CURP</dt>
-                                                <dd class="col-sm-9">WUSH398473</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.rfcOrCurpPayer}}</dd>
 
                                                 <dt class="col-sm-3">Nombre</dt>
-                                                <dd class="col-sm-9">Pedro</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.orderingName}}</dd>
 
                                                 <dt class="col-sm-3">Apellido Paterno</dt>
-                                                <dd class="col-sm-9">Perez</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.orderingName}}</dd>
 
                                                 <dt class="col-sm-3">Apellido Materno</dt>
-                                                <dd class="col-sm-9">Gonzalez</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.orderingName}}</dd>
                                             </dl>
                                         </div>
                                     </div>
@@ -129,22 +174,22 @@
                                             (expanded)="expanded2($event)" [collapse]="isCollapsed2">
                                             <dl class="row">
                                                 <dt class="col-sm-3">Tipo de Cuenta</dt>
-                                                <dd class="col-sm-9">Tercero a Tercero</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.ordererAccountType}}</dd>
 
                                                 <dt class="col-sm-3">Cuenta</dt>
-                                                <dd class="col-sm-9">2426524</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.orderingAccount}}</dd>
 
                                                 <dt class="col-sm-3">RFC o CURP</dt>
-                                                <dd class="col-sm-9">WUSH837493FDFECC92</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.rfcOrCurpPayer}}</dd>
 
                                                 <dt class="col-sm-3">Nombre</dt>
-                                                <dd class="col-sm-9">Pedro</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.orderingName}}</dd>
 
                                                 <dt class="col-sm-3">Apellido Paterno</dt>
-                                                <dd class="col-sm-9">Perez</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.orderingName}}</dd>
 
                                                 <dt class="col-sm-3">Apellido Materno</dt>
-                                                <dd class="col-sm-9">Gonzalez</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.orderingName}}</dd>
                                             </dl>
                                         </div>
                                     </div>
@@ -173,22 +218,22 @@
                                             (expanded)="expanded3($event)" [collapse]="isCollapsed3">
                                             <dl class="row">
                                                 <dt class="col-sm-3">Tipo de Cuenta</dt>
-                                                <dd class="col-sm-9">Tercero a Tercero</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.ordererAccountType}}</dd>
 
                                                 <dt class="col-sm-3">Cuenta</dt>
-                                                <dd class="col-sm-9">2426524</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.cuentaBeneficiario}}</dd>
 
                                                 <dt class="col-sm-3">RFC o CURP</dt>
-                                                <dd class="col-sm-9">WUSH398473</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.rFCOCurpBeneficiario}}</dd>
 
                                                 <dt class="col-sm-3">Nombre</dt>
-                                                <dd class="col-sm-9">Pedro</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.nombreBeneficiario}}</dd>
 
                                                 <dt class="col-sm-3">Apellido Paterno</dt>
-                                                <dd class="col-sm-9">Perez</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.nombreBeneficiario}}</dd>
 
                                                 <dt class="col-sm-3">Apellido Materno</dt>
-                                                <dd class="col-sm-9">Gonzalez</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.nombreBeneficiario}}</dd>
                                             </dl>
                                         </div>
                                     </div>
@@ -216,22 +261,22 @@
                                             (expanded)="expanded4($event)" [collapse]="isCollapsed4">
                                             <dl class="row">
                                                 <dt class="col-sm-3">Tipo de Cuenta</dt>
-                                                <dd class="col-sm-9">Tercero a Tercero</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.ordererAccountType}}</dd>
 
                                                 <dt class="col-sm-3">Cuenta</dt>
-                                                <dd class="col-sm-9">2426524</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.cuentaBeneficiario2}}</dd>
 
                                                 <dt class="col-sm-3">RFC o CURP</dt>
-                                                <dd class="col-sm-9">WUSH398473</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.rFCOCurpBeneficiario2}}</dd>
 
                                                 <dt class="col-sm-3">Nombre</dt>
-                                                <dd class="col-sm-9">Pedro</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.nombreBeneficiario2}}</dd>
 
                                                 <dt class="col-sm-3">Apellido Paterno</dt>
-                                                <dd class="col-sm-9">Perez</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.nombreBeneficiario2}}</dd>
 
                                                 <dt class="col-sm-3">Apellido Materno</dt>
-                                                <dd class="col-sm-9">Gonzalez</dd>
+                                                <dd class="col-sm-9">{{cdaScreen.nombreBeneficiario2}}</dd>
                                             </dl>
                                         </div>
                                     </div>
@@ -248,20 +293,20 @@
                         <div class="col-md-12">
                             <textarea id="textarea-input" name="textarea-input" rows="9" class="form-control"
                                 placeholder="Content.."
-                                disabled>||1|08122014|06122014|112506|40012|IXE|Juan Garza Molina|40|032180000110540121|GAMJ740510F07|BBVA|Shunashi Perea Ortiz|40|012180012528891407|PEOS790430|Pago de Insumos|240|1500|00000100000100009805||</textarea>
+                                disabled>{{cdaScreen.selloDigital}}</textarea>
                         </div>
                         <br />
                         <h3>Sello Digital</h3>
                         <div class="col-md-12">
                             <textarea id="textarea-input" name="textarea-input" rows="9" class="form-control"
                                 placeholder="Content.."
-                                disabled>kKQggYXet1N+j2FSLVaJaLBOLMTNXOnXSXW10IigQGLAz6EhCSt+lF2UKZPX/jZhEPs7ieJkSpvQdtjGFoKdj7ujHwCAScEd8qzFEy+M1pGlr0+I9k29xQTEToiROK9CBHc2xWEk4T9Gys8WheoeItU2/3d4cA3jZ6Y3j7jIdyM03bhE5CjFplLMlVica+VybHpotIXKjVJWmyChxeu+ikOkqbOP3n06zJNjdYuEe4YTjTuOusDhzOJiBPPTwAiZgTMAaQ==</textarea>
+                                disabled>{{cdaScreen.selloDigital}}</textarea>
                         </div><br />
                         <h3>CDA</h3>
                         <div class="col-md-12">
                             <textarea id="textarea-input" name="textarea-input" rows="9" class="form-control"
                                 placeholder="Content.."
-                                disabled>||1|08122014|06122014|112506|40012|IXE|Juan Garza Molina|40|032180000110540121|GAMJ740510F07|BBVA|Shunashi Perea Ortiz|40|012180012528891407|PEOS790430|Pago de Insumos|240|1500|00000100000100009805|| kKQggYXet1N+j2FSLVaJaLBOLMTNXOnXSXW10IigQGLAz6EhCSt+lF2UKZPX/jZhEPs7ieJkSpvQdtjGFoKdj7ujHwCAScEd8qzFEy+M1pGlr0+I9k29xQTEToiROK9CBHc2xWEk4T9Gys8WheoeItU2/3d4cA3jZ6Y3j7jIdyM03bhE5CjFplLMlVica+VybHpotIXKjVJWmyChxeu+ikOkqbOP3n06zJNjdYuEe4YTjTuOusDhzOJiBPPTwAiZgTMAaQ==</textarea>
+                                disabled>{{cdaScreen.selloDigital}}</textarea>
                         </div>
                         <br />
                     </div>
